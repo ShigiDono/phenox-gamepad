@@ -291,7 +291,7 @@ void main(void) {\n\
             gl.bindTexture(gl.TEXTURE_2D, null);
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         }
-
+        var canvas;
         function initWebGL() {
             function initGL(canvas) {
                 gl = null;
@@ -312,7 +312,7 @@ void main(void) {\n\
                 }
                 return gl;
             }
-            var canvas = document.getElementById("overlay");
+            canvas = document.getElementById("overlay");
 
             var video = document.getElementById('video');
 
