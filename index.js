@@ -6,10 +6,10 @@ var port = process.env.PORT || 3000;
 var fs = require('fs');
 var WsServer = require('ws').Server;
 var ws = new WsServer({ port: 3001});
-
+var socket;
 var unixsock_server = net.createServer(function (c) {    
     c.on("data", function(data) {
-
+    socket = c;
     var send_data = data;
     ws.clients.forEach(function(client) { 
         console.log(data.length);
@@ -27,7 +27,7 @@ var unixsock_server = net.createServer(function (c) {
     });
     ws.on('message', function(message) {
         //
-
+console.log(message);
         c.write(message);
     });
 
@@ -39,14 +39,18 @@ function broadcast() {
     });
 }
 
-//broadcast();     
+broadcast();     
 
 ws.on('connection', function(ws) {
-    console.log('New connection');
+    ws.on('message', function(message) {
+        //
+//console.log(message);
+        if (socket)socket.write(message);
+    });    console.log('New connection');
 }); 
 
 app.get('/', function (req, res) {
-    fs.readFile('index.html', function(err, content) {
+    fs.readFile('/root/javascript/projects/gamepad/index.html', function(err, content) {
         if (err) { throw err; }
         console.log("response end");
         res.end(content);
