@@ -225,9 +225,7 @@ void main(void) {\n\
             my_img.width = 128;
             my_img.height = 128;
             my_img.src = element;
-            self.texture = gl.createTexture();
-            var self = this;
-            self.texture = gl.createTexture();
+            this.texture = gl.createTexture();
             my_img.onload = function() {
                 gl.bindTexture(gl.TEXTURE_2D, self.texture);
                 //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -300,7 +298,6 @@ void main(void) {\n\
 
         var t = new rect_buffer();
         var s = new shader();
-        te = new texture("img/test.jpg");
 
 
         function draw(time) {
