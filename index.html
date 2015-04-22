@@ -1,92 +1,25 @@
 <html lang="en">
   <head>
-    <!--meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1"-->
+    <meta charset="utf-8">
+    <!--meta http-equiv="X-UA-Compatible" content="IE=edge"-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, max-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <script src="js/jquery.min.js"></script>
-    <style>
-        html,body{
-            margin:0;
-            height:100%;
-            overflow:hidden;
-        }
-        img{
-            min-height:100%;
-            min-width:100%;
-            height:auto;
-            width:auto;
-            position:absolute;
-            top:-50%; bottom:-50%;
-            left:-50%; right:-50%;
-            margin:auto;
-            z-index: -999;
-        }
-    </style>
+    <script src="js/virtualjoystick.js"></script>
+    <script src="js/main.js"></script>
 </head>
 <body>
-    <script src="js/virtualjoystick.js"></script>
-<script>
-    console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
-
-    // 
-    var joystick_a    = new VirtualJoystick({
-        container   : document.body,
-        strokeStyle : 'cyan',
-        limitStickTravel: true,
-        stickRadius : 120,  
-    });
-    joystick_a.addEventListener('touchStartValidation', function(event){
-        var touch   = event.changedTouches[0];
-        return touch.pageX < window.innerWidth/2;
-    });
-
-    // one on the right of the screen
-    var joystick_b    = new VirtualJoystick({
-        container   : document.body,
-        strokeStyle : 'orange',
-        limitStickTravel: true,
-        stickRadius : 120     
-    });
-    joystick_b.addEventListener('touchStartValidation', function(event){
-        var touch   = event.changedTouches[0];
-        return touch.pageX >= window.innerWidth/2;
-    });
-
-    var parser = document.createElement('a');
-    parser.href = document.URL
-
-    var ws = new WebSocket("ws://" + parser.hostname + ":3001");
-    ws.binaryType = "arraybuffer";
-
-    var elem;
-    ws.onopen = function(){    
-        ws.onmessage = function(e) {
-            document.getElementById('video').src = URL.createObjectURL(new Blob([e.data]));
-        }
-        ws.onerror = function(e) {
-            console.error(e);
-        }
-        ws.onclose = function() {
-            console.log("Socket closed");
-        }
-        setInterval(function(){
-        ws.send(JSON.stringify({
-            a: {
-                dx: joystick_a.deltaX(),
-                dy: joystick_a.deltaY()
-            },
-            b: {
-                dx: joystick_b.deltaY(),
-                dy: joystick_b.deltaY()
-            }
-        }));
-        }, 1/30 * 1000);
-    }
-    $(window).on('beforeunload', function(){
-        ws.close();
-    });
-
-</script>
 <img id="video" width="100%" height="100%"></img>
+<div id="touch-screen"></div>
+<div id="landscape-alert">
+    <div class="container" id="logo">
+        <h3>スマホをランドスケープモードに変えてください</h3>
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+    </div>
+</div>
+<!---->
 </body>
 </html>
