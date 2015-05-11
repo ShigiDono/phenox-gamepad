@@ -35,7 +35,7 @@ console.log(message);
 
 function broadcast() {
     fs.unlink('./mysocket', function (err) {
-        unixsock_server.listen('/root/javascript/projects/mysocket');
+        unixsock_server.listen('/root/nodejs/projects/imgserver/mysocket');
     });
 }
 
@@ -50,7 +50,7 @@ ws.on('connection', function(ws) {
 }); 
 
 app.get('/', function (req, res) {
-    fs.readFile('/root/javascript/projects/gamepad/index.html', function(err, content) {
+    fs.readFile(__dirname + '/index.html', function(err, content) {
         if (err) { throw err; }
         console.log("response end");
         res.end(content);
