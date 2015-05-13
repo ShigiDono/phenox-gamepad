@@ -247,13 +247,13 @@ void SetAngles(const FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = Isolate::GetCurrent();
   HandleScope scope(isolate);
 
-  if (args.Length() < 3) {
+  if (args.Length() < 2) {
     isolate->ThrowException(Exception::TypeError(
         String::NewFromUtf8(isolate, "Wrong number of arguments")));
     return;
   }
 
-  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber()) {
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()/* || !args[2]->IsNumber()*/) {
     isolate->ThrowException(Exception::TypeError(
         String::NewFromUtf8(isolate, "Wrong arguments")));
     return;
@@ -262,7 +262,7 @@ void SetAngles(const FunctionCallbackInfo<Value>& args) {
   if(pxget_operate_mode() == 2) {
     pxset_dst_degx(args[0]->NumberValue());
     pxset_dst_degy(args[1]->NumberValue());
-    pxset_dst_degz(args[2]->NumberValue());
+    //pxset_dst_degz(args[2]->NumberValue());
     //pxset_visioncontrol_xy(st.vision_tx + args[0]->NumberValue(),st.vision_ty + args[1]->NumberValue());    
   }
 }
