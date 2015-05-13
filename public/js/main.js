@@ -1,9 +1,18 @@
 $(document).ready(function() {
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
-    var overlay = document.getElementById("overlay"),
-    ctx     = overlay.getContext('2d');
-    ctx.fillRect(0, 0, overlay.width, overlay.height);
-    // 
+    var canvas = document.getElementById("overlay"),
+    context     = canvas.getContext('2d');
+      var centerX = canvas.width / 2;
+      var centerY = canvas.height / 2;
+      var radius = 70;
+
+      context.beginPath();
+      context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+      context.fillStyle = 'green';
+      context.fill();
+      context.lineWidth = 5;
+      context.strokeStyle = '#003300';
+      context.stroke();    // 
     var joystick_a    = new VirtualJoystick({
         container   : document.body,
         strokeStyle : 'cyan',
@@ -36,7 +45,11 @@ $(document).ready(function() {
     var elem;
     ws.onopen = function(){    
         ws.onmessage = function(e) {
-            document.getElementById('video').src = URL.createObjectURL(new Blob([e.data.slice(5)]));
+            if (e.data[0] == 0) {
+                document.getElementById('video').src = URL.createObjectURL(new Blob([e.data.slice(5)]));
+            } else {
+
+            }
         }
         ws.onerror = function(e) {
             console.error(e);
