@@ -22,12 +22,14 @@ function toBuffer(ab) {
 setInterval(function() {
     var phenox_data = phenox.get_data();
     var send_data = toBuffer(phenox_data);
-    ws.clients.forEach(function(client) { 
-        if(client.bufferedAmount == 0) {
-            client.send(send_data,{binary: true});
-            client.send(JSON.stringify(phenox_data.features),{binary: true});
-        }
-    });
+    if (ws && ws.clients) {
+        ws.clients.forEach(function(client) { 
+            if(client.bufferedAmount == 0) {
+                client.send(send_data,{binary: true});
+                client.send(JSON.stringify(phenox_data.features),{binary: true});
+            }
+        });
+    }
 }, 25);
 
 ws.on('request', function(request) {
