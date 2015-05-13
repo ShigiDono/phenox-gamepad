@@ -10,10 +10,13 @@ var fs = require('fs');
 var socket;
 phenox.init();
 function toBuffer(ab) {
-    var buffer = new Buffer(ab.length);
-    var view = ab;//nbew Uint8Array(ab);
+    var buffer = new Buffer(ab.length + 5);
+    var view = ab;
+    buffer[4] = 0;
+    var a = new Uint32Array(buffer);
+    a[0] = ab.length;  
     for (var i = 0; i < buffer.length; ++i) {
-        buffer[i] = view.array[i];
+        buffer[i+5] = view.array[i];
     }
     return buffer;
 }
@@ -24,7 +27,7 @@ setInterval(function() {
             client.send(send_data,{binary: true});
         }
     });
-}, 33);
+}, 25);
 
 ws.on('request', function(request) {
     var connection = request.accept(null, request.origin); 
@@ -33,7 +36,8 @@ ws.on('request', function(request) {
 });
 ws.on('connection', function(ws) {
     ws.on('message', function(message) {
-        console.log(message);
+        var obj=JSON.parse( message);
+        phenox.set_pos(obj.a.dx, obj.a.dy);
     });
 }); 
 
