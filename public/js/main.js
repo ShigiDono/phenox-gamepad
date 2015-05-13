@@ -2,7 +2,7 @@ $(document).ready(function() {
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
     var canvas = document.getElementById("overlay"),
     context     = canvas.getContext('2d');
-      var centerX = canvas.width / 2;
+      /*var centerX = canvas.width / 2;
       var centerY = canvas.height / 2;
       var radius = 70;
 
@@ -12,7 +12,7 @@ $(document).ready(function() {
       context.fill();
       context.lineWidth = 5;
       context.strokeStyle = '#003300';
-      context.stroke();    // 
+      context.stroke();    // */
     var joystick_a    = new VirtualJoystick({
         container   : document.body,
         strokeStyle : 'cyan',
