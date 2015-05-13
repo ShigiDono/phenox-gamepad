@@ -43,8 +43,12 @@ ws.on('connection', function(ws) {
             } else if (message.cmd == "down") {
                 phenox.go_down();
             }
+        } else {
+            phenox.set_pos(obj.a.dx, obj.a.dy);//obj.b.dx
+            if (obj.b.dy != 0) {
+
+            }
         }
-        phenox.set_pos(obj.a.dx, obj.a.dy);
     });
 }); 
 
