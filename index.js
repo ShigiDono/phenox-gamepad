@@ -21,10 +21,12 @@ function toBuffer(ab) {
     return buffer;
 }
 setInterval(function() {
-    var send_data = toBuffer(phenox.get_data());
+    var phenox_data = phenox.get_data();
+    var send_data = toBuffer(phenox_data);
     ws.clients.forEach(function(client) { 
         if(client.bufferedAmount == 0) {
             client.send(send_data,{binary: true});
+            client.send(JSON.stringify(phenox_data.features));
         }
     });
 }, 25);
