@@ -108,7 +108,7 @@ void GetData(const FunctionCallbackInfo<Value>& args) {
                     //cvCircle(testImage,cvPoint((int)ft[i].pcx,(int)ft[i].pcy),2,CV_RGB(255,255,0),1,8,0);
                     //cvCircle(testImage,cvPoint((int)ft[i].cx,(int)ft[i].cy),2,CV_RGB(0,255,0),1,8,0);
                     //cvLine(testImage,cvPoint((int)ft[i].pcx,(int)ft[i].pcy),cvPoint((int)ft[i].cx,(int)ft[i].cy),CV_RGB(0,0,255),1,8,0);
-                    printf("%.0f %.0f %.0f %.0f\n",ft[i].pcx,ft[i].pcy,ft[i].cx,ft[i].cy);
+                    //printf("%.0f %.0f %.0f %.0f\n",ft[i].pcx,ft[i].pcy,ft[i].cx,ft[i].cy);
                 }
                 ftstate = 0;
             }
@@ -121,7 +121,7 @@ void GetData(const FunctionCallbackInfo<Value>& args) {
         mat = cvEncodeImage(".jpeg",testImage,param); 
         unsigned char *buff = mat->data.ptr;
         int buffsize = mat->step;
-        printf("CPU0:image:%d %d\n",count,buffsize);
+        //printf("CPU0:image:%d %d\n",count,buffsize);
         count++;
 
         v8::Handle<v8::Object> external_array = v8::Object::New(isolate);
