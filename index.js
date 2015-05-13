@@ -17,7 +17,7 @@ setInterval(function() {
         client.send(send_data,{binary: true});
         }
     });
-});
+}, 100);
 
 
 ws.on('connection', function(ws) {
