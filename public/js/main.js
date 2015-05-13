@@ -2,7 +2,7 @@ $(document).ready(function() {
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
     var canvas = document.getElementById("overlay"),
     context     = canvas.getContext('2d');
-      /*var centerX = canvas.width / 2;
+      /*avar centerX = canvas.width / 2;
       var centerY = canvas.height / 2;
       var radius = 70;
 
@@ -45,7 +45,7 @@ $(document).ready(function() {
     var elem;
     ws.onopen = function(){    
         ws.onmessage = function(e) {
-            if (e.data[0] == 0) {
+            if (e.data[4] == 0) {
                 document.getElementById('video').src = URL.createObjectURL(new Blob([e.data.slice(5)]));
             } else {
 
