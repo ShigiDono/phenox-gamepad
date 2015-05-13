@@ -5,6 +5,7 @@ var port = process.env.PORT || 3000;
 var WsServer = require('ws').Server;
 var ws = new WsServer({ port: 3001});
 var phenox = require('./node_modules/phenox/build/Release/phenox');
+var fs = require('fs');
 var socket;
 phenox.init();
 setInterval(function() {
