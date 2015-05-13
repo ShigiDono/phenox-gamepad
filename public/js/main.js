@@ -44,6 +44,12 @@ $(document).ready(function() {
 
     var elem;
     ws.onopen = function(){    
+        $("#up").click(function() {
+            ws.send(JSON.stringify({type: "command", cmd: "up"}));
+        });
+        $("#down").click(function() {
+            ws.send(JSON.stringify({type: "command", cmd: "down"}));
+        });
         ws.onmessage = function(e) {
             var data = new Uint8Array(e.data);
             if (data[4] == 0) {
