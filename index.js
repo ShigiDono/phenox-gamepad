@@ -22,12 +22,14 @@ function toBuffer(ab) {
 setInterval(function() {
     var phenox_data = phenox.get_data();
     var send_data = toBuffer(phenox_data);
-    ws.clients.forEach(function(client) { 
-        if(client.bufferedAmount == 0) {
-            client.send(send_data,{binary: true});
-            client.send(JSON.stringify(phenox_data.features),{binary: true});
-        }
-    });
+    if (ws && ws.clients) {
+        ws.clients.forEach(function(client) { 
+            if(client.bufferedAmount == 0) {
+                client.send(send_data,{binary: true});
+                client.send(JSON.stringify(phenox_data.features),{binary: true});
+            }
+        });
+    }
 }, 25);
 
 ws.on('request', function(request) {
@@ -46,9 +48,12 @@ ws.on('connection', function(ws) {
                 phenox.go_down();
             }
         } else {
-            phenox.set_angles(obj.a.dx, obj.a.dy, obj.b.dx);//obj.b.dx
-            if (obj.b.dy != 0) {
+            phenox.set_angles(obj.a.dx/15, obj.a.dy/15, obj.b.dx/15);//obj.b.dx
+            if (obj.b.dy > 100) {
+                phenox.go_up();
 
+            } else if (obj.b.dy < -100) {
+                phenox.go_down();
             }
         }
     });
