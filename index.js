@@ -1,16 +1,14 @@
 var net = require('net');
-var fs = require('fs');
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 3000;
-var fs = require('fs');
 var WsServer = require('ws').Server;
 var ws = new WsServer({ port: 3001});
+var phenox = require('./node_modules/phenox/build/Release/phenox');
 var socket;
-var unixsock_server = net.createServer(function (c) {    
-    c.on("data", function(data) {
-    socket = c;
-    var send_data = data;
+phenox.init();
+setInterval(function() {
+    var send_data = phenox.get_data();
     ws.clients.forEach(function(client) { 
         console.log(data.length);
         //client && client.send(send_data);     
@@ -19,34 +17,13 @@ var unixsock_server = net.createServer(function (c) {
         client.send(send_data,{binary: true});
         }
     });
-    //!compressed in client
-    
-    });
-    c.on('error', function() {
-        console.log('client error');
-    });
-    ws.on('message', function(message) {
-        //
-console.log(message);
-        c.write(message);
-    });
-
 });
 
-function broadcast() {
-    fs.unlink('./mysocket', function (err) {
-        unixsock_server.listen('/root/nodejs/projects/imgserver/mysocket');
-    });
-}
-
-broadcast();     
 
 ws.on('connection', function(ws) {
     ws.on('message', function(message) {
-        //
-//console.log(message);
-        if (socket)socket.write(message);
-    });    console.log('New connection');
+        console.log(message);
+    });
 }); 
 
 app.get('/', function (req, res) {
