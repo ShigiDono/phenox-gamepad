@@ -37,6 +37,13 @@ ws.on('request', function(request) {
 ws.on('connection', function(ws) {
     ws.on('message', function(message) {
         var obj=JSON.parse( message);
+        if (message.type && message.type == "command") {
+            if (message.cmd == "up") {
+                phenox.go_up();
+            } else if (message.cmd == "down") {
+                phenox.go_down();
+            }
+        }
         phenox.set_pos(obj.a.dx, obj.a.dy);
     });
 }); 
