@@ -11,11 +11,11 @@ phenox.init();
 setInterval(function() {
     var send_data = phenox.get_data();
     ws.clients.forEach(function(client) { 
-        console.log(data.length);
+        console.log(send_data.byteLength);
         //client && client.send(send_data);     
         //console.log(client.bufferedAmount);
         if(client.bufferedAmount == 0) {
-        client.send(send_data,{binary: true});
+            client.send(send_data,{binary: true});
         }
     });
 }, 100);
