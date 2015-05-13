@@ -38,10 +38,11 @@ ws.on('request', function(request) {
 ws.on('connection', function(ws) {
     ws.on('message', function(message) {
         var obj=JSON.parse( message);
-        if (message.type && message.type == "command") {
-            if (message.cmd == "up") {
+        console.log(message);
+        if (obj.type == "command") {
+            if (obj.cmd == "up") {
                 phenox.go_up();
-            } else if (message.cmd == "down") {
+            } else if (obj.cmd == "down") {
                 phenox.go_down();
             }
         } else {
