@@ -45,9 +45,12 @@ ws.on('connection', function(ws) {
                 phenox.go_down();
             }
         } else {
-            phenox.set_angles(obj.a.dx, obj.a.dy, obj.b.dx);//obj.b.dx
-            if (obj.b.dy != 0) {
+            phenox.set_angles(obj.a.dx/15, obj.a.dy/15, obj.b.dx/15);//obj.b.dx
+            if (obj.b.dy > 100) {
+                phenox.go_up();
 
+            } else if (obj.b.dy < -100) {
+                phenox.go_down();
             }
         }
     });
