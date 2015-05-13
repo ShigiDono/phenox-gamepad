@@ -45,7 +45,8 @@ $(document).ready(function() {
     var elem;
     ws.onopen = function(){    
         ws.onmessage = function(e) {
-            if (e.data[4] == 0) {
+            var data = new Uint8Array(e.data);
+            if (data[4] == 0) {
                 document.getElementById('video').src = URL.createObjectURL(new Blob([e.data.slice(5)]));
             } else {
 
