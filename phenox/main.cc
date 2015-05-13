@@ -289,7 +289,7 @@ void Init(Handle<Object> exports) {
   NODE_SET_METHOD(exports, "set_pos", SetPositionXY);
   NODE_SET_METHOD(exports, "set_angles", SetAngles);
   NODE_SET_METHOD(exports, "go_down", GoDown);
-  NODE_SET_METHOD(exports, "go_up", GoDown);
+  NODE_SET_METHOD(exports, "go_up", GoUp);
 }
 
 NODE_MODULE(phenox, Init)
