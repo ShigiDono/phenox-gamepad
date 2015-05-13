@@ -240,8 +240,29 @@ void SetPositionXY(const FunctionCallbackInfo<Value>& args) {
 
   pxget_selfstate(&st);
   if(pxget_operate_mode() == 2) {
+    pxset_visioncontrol_xy(st.vision_tx + args[0]->NumberValue(),st.vision_ty + args[1]->NumberValue());    
+  }
+}
+void SetAngles(const FunctionCallbackInfo<Value>& args) {
+    Isolate* isolate = Isolate::GetCurrent();
+  HandleScope scope(isolate);
+
+  if (args.Length() < 3) {
+    isolate->ThrowException(Exception::TypeError(
+        String::NewFromUtf8(isolate, "Wrong number of arguments")));
+    return;
+  }
+
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber()) {
+    isolate->ThrowException(Exception::TypeError(
+        String::NewFromUtf8(isolate, "Wrong arguments")));
+    return;
+  }
+
+  if(pxget_operate_mode() == 2) {
     pxset_dst_degx(args[0]->NumberValue());
     pxset_dst_degy(args[1]->NumberValue());
+    pxset_dst_degz(args[2]->NumberValue());
     //pxset_visioncontrol_xy(st.vision_tx + args[0]->NumberValue(),st.vision_ty + args[1]->NumberValue());    
   }
 }
@@ -266,6 +287,7 @@ void Init(Handle<Object> exports) {
   NODE_SET_METHOD(exports, "init", InitPhenox);
   NODE_SET_METHOD(exports, "get_data", GetData);
   NODE_SET_METHOD(exports, "set_pos", SetPositionXY);
+  NODE_SET_METHOD(exports, "set_angles", SetAngles);
   NODE_SET_METHOD(exports, "go_down", GoDown);
   NODE_SET_METHOD(exports, "go_up", GoDown);
 }

@@ -5,7 +5,7 @@ var app = express();
 var port = process.env.PORT || 3000;
 var WsServer = require('ws').Server;
 var ws = new WsServer({ port: 3001});
-var phenox = require('./node_modules/phenox/build/Release/phenox');
+var phenox = require('./phenox/build/Release/phenox');
 var fs = require('fs');
 var socket;
 phenox.init();
@@ -44,7 +44,7 @@ ws.on('connection', function(ws) {
                 phenox.go_down();
             }
         } else {
-            phenox.set_pos(obj.a.dx, obj.a.dy);//obj.b.dx
+            phenox.set_angles(obj.a.dx, obj.a.dy, obj.b.dx);//obj.b.dx
             if (obj.b.dy != 0) {
 
             }
