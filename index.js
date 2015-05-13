@@ -47,7 +47,7 @@ ws.on('connection', function(ws) {
                 phenox.go_down();
             }
         } else {
-            if (obj.a.dx != 0 || obj.a.dy != 0/* || obj.b.dx != 0*/) {
+            if (Math.mod(obj.a.dx) > 1 || Math.mod(obj.a.dy) > 1/* || obj.b.dx != 0*/) {
                 phenox.set_angles(-obj.a.dy/15, -obj.a.dx/15/*, obj.b.dx/15*/);//obj.b.dx
             }
             if (obj.b.dy < -100) {
