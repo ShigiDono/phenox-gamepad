@@ -1,4 +1,3 @@
-var util = require('util');
 var net = require('net');
 var express = require('express');
 var app = express();
@@ -26,7 +25,7 @@ setInterval(function() {
     ws.clients.forEach(function(client) { 
         if(client.bufferedAmount == 0) {
             client.send(send_data,{binary: true});
-            client.send(JSON.stringify(phenox_data.features));
+            client.send(JSON.stringify(phenox_data.features),{binary: true});
         }
     });
 }, 25);
