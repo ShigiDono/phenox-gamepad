@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-    requestAnimationFrame = function(callback, element) {
         var requestAnimationFrame =
             window.requestAnimationFrame        || 
             window.webkitRequestAnimationFrame  || 
@@ -15,9 +14,7 @@ $(document).ready(function() {
                 lastTime = currTime + timeToCall;
                 return id;
             };
-
-        return requestAnimationFrame.call(window, callback, element);
-    }
+    var detector = 0;
 
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
     var canvas = document.getElementById("overlay");
