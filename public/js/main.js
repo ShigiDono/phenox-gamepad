@@ -1,6 +1,9 @@
 $(document).ready(function() {
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
-    var canvas = document.getElementById("overlay"),
+    var canvas = document.getElementById("overlay");
+    var ctracker = new clm.tracker();
+    ctracker.init(pModel);
+    ctracker.start(videoInput);
     function resizeCanvas() {
             canvas.width = window.innerWidth*devicePixelRatio;
             canvas.height = window.innerHeight*devicePixelRatio;
@@ -56,9 +59,6 @@ $(document).ready(function() {
         }
         drawLoop();
         
-        var ctracker = new clm.tracker();
-        ctracker.init(pModel);
-        ctracker.start(videoInput);
         ws.onmessage = function(e) {
             var data = new Uint8Array(e.data);
             if (data[4] == 0) {
