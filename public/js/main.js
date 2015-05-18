@@ -1,14 +1,37 @@
 $(document).ready(function() {
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
     var canvas = document.getElementById("overlay");
-    var context = canvas.getContext('2d');
+    var overlayContext = canvas.getContext('2d');
 
     var videoInput = document.getElementById('video');
     var canvasInput = document.getElementById('overlay');
 
-    var htracker = new headtrackr.Tracker();
+    var htracker = new headtrackr.Tracker({calcAngles : true, ui : false, headPosition : false, debug : debugOverlay}});
     htracker.init(videoInput, canvasInput, false);
     htracker.start();
+    document.addEventListener("facetrackingEvent", function( event ) {
+        // clear canvas
+        overlayContext.clearRect(0,0,320,240);
+        // once we have stable tracking, draw rectangle
+        if (event.detection == "CS") {
+            overlayContext.translate(event.x, event.y)
+            overlayContext.rotate(event.angle-(Math.PI/2));
+            overlayContext.strokeStyle = "#00CC00";
+            overlayContext.strokeRect((-(event.width/2)) >> 0, (-(event.height/2)) >> 0, event.width, event.height);
+            overlayContext.rotate((Math.PI/2)-event.angle);
+            overlayContext.translate(-event.x, -event.y);
+        }
+    });
+    
+    // turn off or on the canvas showing probability
+    function showProbabilityCanvas() {
+        var debugCanvas = document.getElementById('debug');
+        if (debugCanvas.style.display == 'none') {
+            debugCanvas.style.display = 'block';
+        } else {
+            debugCanvas.style.display = 'none';
+        }
+    }
 
     function resizeCanvas() {
         canvas.width = window.innerWidth*devicePixelRatio;
