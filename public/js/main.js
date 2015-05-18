@@ -42,7 +42,7 @@ $(document).ready(function() {
 
     function play() {
         requestAnimationFrame(play);
-        if (video.paused) video.play();
+        context.clearRect (0 , 0 , canvas.width, canvas.height );
         
         if (true || (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0)) {
             
@@ -92,7 +92,6 @@ $(document).ready(function() {
                     coord[2] / video.videoWidth * canvas.clientWidth,
                     coord[3] / video.videoHeight * canvas.clientHeight);
                 context.stroke();
-                context.clearRect (0 , 0 , canvas.width, canvas.height );
             } else fist_pos_old = null;
         }
     }
