@@ -51,14 +51,14 @@ $(document).ready(function() {
           // do something with the positions ...
           // print the positions
         }
-        positionLoop();
+        //positionLoop();
                 
         function drawLoop() {
           requestAnimationFrame(drawLoop);
           context.clearRect(0, 0, canvas.width, canvas.height);
           ctracker.draw(canvas);
         }
-        drawLoop();
+        //drawLoop();
         
         ws.onmessage = function(e) {
             var data = new Uint8Array(e.data);
