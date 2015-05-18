@@ -1,51 +1,29 @@
 $(document).ready(function() {
+
+    requestAnimationFrame = function(callback, element) {
+        var requestAnimationFrame =
+            window.requestAnimationFrame        || 
+            window.webkitRequestAnimationFrame  || 
+            window.mozRequestAnimationFrame     || 
+            window.oRequestAnimationFrame       ||
+            function(callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function() {
+                    callback(currTime + timeToCall);
+                }, timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+
+        return requestAnimationFrame.call(window, callback, element);
+    }
+
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
     var canvas = document.getElementById("overlay");
-    var canvasOverlay = canvas;
-    var overlayContext = canvas.getContext('2d');
+    var context = canvas.getContext('2d');
 
-    var videoInput = document.getElementById('video');
-    var canvasInput = document.getElementById('overlay');
-
-    var debugOverlay = document.getElementById('debug');
-    var overlayContext = canvasOverlay.getContext('2d');
-    /*canvasOverlay.style.position = "absolute";
-    canvasOverlay.style.top = '0px';
-    canvasOverlay.style.zIndex = '100001';
-    canvasOverlay.style.display = 'block';*/
-    debugOverlay.style.position = "absolute";
-    debugOverlay.style.top = '0px';
-    debugOverlay.style.zIndex = '100002';
-    debugOverlay.style.display = 'none';
-
-    var htracker = new headtrackr.Tracker({calcAngles : true, ui : false, headPosition : false, debug : debugOverlay});
-    htracker.init(videoInput, canvasInput, false);
-    htracker.start();
-    document.addEventListener("facetrackingEvent", function( event ) {
-        // clear canvas
-        overlayContext.clearRect(0,0,320,240);
-        // once we have stable tracking, draw rectangle
-        if (event.detection == "CS") {
-            overlayContext.translate(event.x, event.y)
-            overlayContext.rotate(event.angle-(Math.PI/2));
-            overlayContext.strokeStyle = "#00CC00";
-            overlayContext.strokeRect((-(event.width/2)) >> 0, (-(event.height/2)) >> 0, event.width, event.height);
-            overlayContext.rotate((Math.PI/2)-event.angle);
-            overlayContext.translate(-event.x, -event.y);
-        }
-    });
-    
-    // turn off or on the canvas showing probability
-    function showProbabilityCanvas() {
-        var debugCanvas = document.getElementById('debug');
-        if (debugCanvas.style.display == 'none') {
-            debugCanvas.style.display = 'block';
-        } else {
-            debugCanvas.style.display = 'none';
-        }
-    }
-    showProbabilityCanvas();
-
+    var video = document.getElementById('video');
     function resizeCanvas() {
         canvas.width = window.innerWidth*devicePixelRatio;
         canvas.height = window.innerHeight*devicePixelRatio;
@@ -62,6 +40,65 @@ $(document).ready(function() {
         var touch   = event.changedTouches[0];
         return touch.pageX < window.innerWidth/2;
     });
+    video.videoWidth = 320;
+    video.videoHeight = 320;
+
+    function play() {
+        requestAnimationFrame(play);
+        if (video.paused) video.play();
+        
+        if (true || (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0)) {
+            
+            /* Prepare the detector once the video dimensions are known: */
+            if (!detector) {
+                var width = ~~(80 * video.videoWidth / video.videoHeight);
+                var height = 80;
+                detector = new objectdetect.detector(width, height, 1.1, objectdetect.handopen);
+            }
+        
+            /* Draw video overlay: */
+            canvas.width = ~~(100 * video.videoWidth / video.videoHeight);
+            canvas.height = 100;
+            context.drawImage(video, 0, 0, canvas.clientWidth, canvas.clientHeight);
+            
+            var coords = detector.detect(video, 1);
+            if (coords[0]) {
+                var coord = coords[0];
+                
+                /* Rescale coordinates from detector to video coordinate space: */
+                coord[0] *= video.videoWidth / detector.canvas.width;
+                coord[1] *= video.videoHeight / detector.canvas.height;
+                coord[2] *= video.videoWidth / detector.canvas.width;
+                coord[3] *= video.videoHeight / detector.canvas.height;
+            
+                /* Find coordinates with maximum confidence: */
+                var coord = coords[0];
+                for (var i = coords.length - 1; i >= 0; --i)
+                    if (coords[i][4] > coord[4]) coord = coords[i];
+                
+                /* Scroll window: */
+                var fist_pos = [coord[0] + coord[2] / 2, coord[1] + coord[3] / 2];
+                if (fist_pos_old) {
+                    var dx = (fist_pos[0] - fist_pos_old[0]) / video.videoWidth,
+                            dy = (fist_pos[1] - fist_pos_old[1]) / video.videoHeight;
+                    
+                        window.scrollBy(dx * 200, dy * 200);
+                } else fist_pos_old = fist_pos;
+                
+                /* Draw coordinates on video overlay: */
+                context.beginPath();
+                context.lineWidth = '2';
+                context.fillStyle = 'rgba(0, 255, 255, 0.5)';
+                context.fillRect(
+                    coord[0] / video.videoWidth * canvas.clientWidth,
+                    coord[1] / video.videoHeight * canvas.clientHeight,
+                    coord[2] / video.videoWidth * canvas.clientWidth,
+                    coord[3] / video.videoHeight * canvas.clientHeight);
+                context.stroke();
+            } else fist_pos_old = null;
+        }
+    }
+    requestAnimationFrame(play);
 
     // one on the right of the screen
     var joystick_b    = new VirtualJoystick({
