@@ -1,13 +1,13 @@
 $(document).ready(function() {
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
     var canvas = document.getElementById("overlay");
+    var canvasOverlay = canvas;
     var overlayContext = canvas.getContext('2d');
 
     var videoInput = document.getElementById('video');
     var canvasInput = document.getElementById('overlay');
 
     var debugOverlay = document.getElementById('debug');
-    var overlayContext = canvasOverlay.getContext('2d');
     canvasOverlay.style.position = "absolute";
     canvasOverlay.style.top = '0px';
     canvasOverlay.style.zIndex = '100001';
