@@ -7,7 +7,7 @@ $(document).ready(function() {
     var canvasInput = document.getElementById('overlay');
 
     var htracker = new headtrackr.Tracker();
-    htracker.init(videoInput, canvasInput);
+    htracker.init(videoInput, canvasInput, false);
     htracker.start();
 
     function resizeCanvas() {
