@@ -380,14 +380,14 @@ headtrackr.Tracker = function(params) {
 		if (!this.initialized) return false;
 		
 		// check if video is playing, if not, return false
-		if (!(videoElement.currentTime > 0 && !videoElement.paused && !videoElement.ended)) {
+		/*if (!(videoElement.currentTime > 0 && !videoElement.paused && !videoElement.ended)) {
 			
 			run = true;
 			//set event
 			videoElement.addEventListener('playing', starter, false);
 			
 			return true;
-		} else {			
+		} else*/ {			
 			starter();
 		}
 		
