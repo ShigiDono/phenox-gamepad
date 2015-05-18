@@ -27,7 +27,7 @@ $(document).ready(function() {
     }
 
     window.addEventListener('resize', resizeCanvas, false);
-       var joystick_a    = new VirtualJoystick({
+    var joystick_a    = new VirtualJoystick({
         container   : document.body,
         strokeStyle : 'cyan',
         limitStickTravel: true,
@@ -38,7 +38,7 @@ $(document).ready(function() {
         return touch.pageX < window.innerWidth/2;
     });
     video.videoWidth = 320;
-    video.videoHeight = 320;
+    video.videoHeight = 240;
 
     function play() {
         requestAnimationFrame(play);
@@ -54,27 +54,27 @@ $(document).ready(function() {
             }
         
             /* Draw video overlay: */
-            canvas.width = ~~(100 * video.videoWidth / video.videoHeight);
-            canvas.height = 100;
-            context.drawImage(video, 0, 0, canvas.clientWidth, canvas.clientHeight);
+            //canvas.width = ~~(100 * video.videoWidth / video.videoHeight);
+            //canvas.height = 100;
+            //context.drawImage(video, 0, 0, canvas.clientWidth, canvas.clientHeight);
             
             var coords = detector.detect(video, 1);
             if (coords[0]) {
                 var coord = coords[0];
+                      
+                /* Find coordinates with maximum confidence: */
+                var coord = coords[0];
+                for (var i = coords.length - 1; i >= 0; --i)
+                    if (coords[i][4] > coord[4]) coord = coords[i];
                 
                 /* Rescale coordinates from detector to video coordinate space: */
                 coord[0] *= video.videoWidth / detector.canvas.width;
                 coord[1] *= video.videoHeight / detector.canvas.height;
                 coord[2] *= video.videoWidth / detector.canvas.width;
                 coord[3] *= video.videoHeight / detector.canvas.height;
-            
-                /* Find coordinates with maximum confidence: */
-                var coord = coords[0];
-                for (var i = coords.length - 1; i >= 0; --i)
-                    if (coords[i][4] > coord[4]) coord = coords[i];
-                
+
                 /* Scroll window: */
-                var fist_pos = [coord[0] + coord[2] / 2, coord[1] + coord[3] / 2];
+/*                var fist_pos = [coord[0] + coord[2] / 2, coord[1] + coord[3] / 2];
                 if (fist_pos_old) {
                     var dx = (fist_pos[0] - fist_pos_old[0]) / video.videoWidth,
                             dy = (fist_pos[1] - fist_pos_old[1]) / video.videoHeight;
