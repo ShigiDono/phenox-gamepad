@@ -6,7 +6,18 @@ $(document).ready(function() {
     var videoInput = document.getElementById('video');
     var canvasInput = document.getElementById('overlay');
 
-    var htracker = new headtrackr.Tracker({calcAngles : true, ui : false, headPosition : false, debug : debugOverlay}});
+    var debugOverlay = document.getElementById('debug');
+    var overlayContext = canvasOverlay.getContext('2d');
+    canvasOverlay.style.position = "absolute";
+    canvasOverlay.style.top = '0px';
+    canvasOverlay.style.zIndex = '100001';
+    canvasOverlay.style.display = 'block';
+    debugOverlay.style.position = "absolute";
+    debugOverlay.style.top = '0px';
+    debugOverlay.style.zIndex = '100002';
+    debugOverlay.style.display = 'none';
+
+    var htracker = new headtrackr.Tracker({calcAngles : true, ui : false, headPosition : false, debug : debugOverlay});
     htracker.init(videoInput, canvasInput, false);
     htracker.start();
     document.addEventListener("facetrackingEvent", function( event ) {
@@ -32,6 +43,7 @@ $(document).ready(function() {
             debugCanvas.style.display = 'none';
         }
     }
+    showProbabilityCanvas();
 
     function resizeCanvas() {
         canvas.width = window.innerWidth*devicePixelRatio;
