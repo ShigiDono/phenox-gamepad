@@ -3,6 +3,13 @@ $(document).ready(function() {
     var canvas = document.getElementById("overlay");
     var context = canvas.getContext('2d');
 
+    var videoInput = document.getElementById('video');
+    var canvasInput = document.getElementById('overlay');
+
+    var htracker = new headtrackr.Tracker();
+    htracker.init(videoInput, canvasInput);
+    htracker.start();
+
     function resizeCanvas() {
         canvas.width = window.innerWidth*devicePixelRatio;
         canvas.height = window.innerHeight*devicePixelRatio;
