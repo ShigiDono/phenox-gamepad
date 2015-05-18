@@ -1,19 +1,13 @@
 $(document).ready(function() {
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
     var canvas = document.getElementById("overlay"),
-    context     = canvas.getContext('2d');
-      /*avar centerX = canvas.width / 2;
-      var centerY = canvas.height / 2;
-      var radius = 70;
+    function resizeCanvas() {
+            canvas.width = window.innerWidth*devicePixelRatio;
+            canvas.height = window.innerHeight*devicePixelRatio;
+    }
 
-      context.beginPath();
-      context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-      context.fillStyle = 'green';
-      context.fill();
-      context.lineWidth = 5;
-      context.strokeStyle = '#003300';
-      context.stroke();    // */
-    var joystick_a    = new VirtualJoystick({
+    window.addEventListener('resize', resizeCanvas, false);
+       var joystick_a    = new VirtualJoystick({
         container   : document.body,
         strokeStyle : 'cyan',
         limitStickTravel: true,
@@ -43,7 +37,28 @@ $(document).ready(function() {
     ws.binaryType = "arraybuffer";
 
     var elem;
+    var go_up = null, go_down = null;
     ws.onopen = function(){    
+        var videoInput = document.getElementById('video');
+
+        function positionLoop() {
+          requestAnimationFrame(positionLoop);
+          var positions = ctracker.getCurrentPosition();
+          // do something with the positions ...
+          // print the positions
+        }
+        positionLoop();
+                
+        function drawLoop() {
+          requestAnimationFrame(drawLoop);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          ctracker.draw(canvas);
+        }
+        drawLoop();
+        
+        var ctracker = new clm.tracker();
+        ctracker.init(pModel);
+        ctracker.start(videoInput);
         ws.onmessage = function(e) {
             var data = new Uint8Array(e.data);
             if (data[4] == 0) {
@@ -59,16 +74,38 @@ $(document).ready(function() {
             console.log("Socket closed");
         }
         setInterval(function(){
-        ws.send(JSON.stringify({
-            a: {
-                dx: joystick_a.deltaX(),
-                dy: joystick_a.deltaY()
-            },
-            b: {
-                dx: joystick_b.deltaY(),
-                dy: joystick_b.deltaY()
+            ws.send(JSON.stringify({
+                a: {
+                    dx: joystick_a.deltaX(),
+                    dy: joystick_a.deltaY()
+                },
+                b: {
+                    dx: joystick_b.deltaX(),
+                    dy: joystick_b.deltaY()
+                }
+            }));
+            if (joystick_b.deltaY() > 119) {
+                go_up = go_up || setTimeout(function() {
+                    ws.send(JSON.stringify({
+                        type: "command",
+                        cmd: "down"
+                    }))
+                }, 2000);
+            } else {
+                clearTimeout(go_up);
+                go_up = null;
             }
-        }));
+            if (joystick_b.deltaY() < -119) {
+                go_down = go_down || setTimeout(function() {
+                    ws.send(JSON.stringify({
+                        type: "command",
+                        cmd: "up"
+                    }))
+                }, 2000);
+            } else {
+                clearTimeout(go_down);
+                go_down = null;
+            }
         }, 1/30 * 1000);
     }
     $(window).on('beforeunload', function(){
