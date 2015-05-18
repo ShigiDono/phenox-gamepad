@@ -95,7 +95,7 @@ $(document).ready(function() {
             } else fist_pos_old = null;
         }
     }
-    requestAnimationFrame(play);
+    //requestAnimationFrame(play);
 
     // one on the right of the screen
     var joystick_b    = new VirtualJoystick({
@@ -150,7 +150,7 @@ $(document).ready(function() {
                         cmd: "down"
                     }))
                 }, 2000);
-            } else {
+            } else if (go_up) {
                 clearTimeout(go_up);
                 go_up = null;
             }
@@ -161,7 +161,7 @@ $(document).ready(function() {
                         cmd: "up"
                     }))
                 }, 2000);
-            } else {
+            } else if (go_down) {
                 clearTimeout(go_down);
                 go_down = null;
             }
