@@ -92,6 +92,7 @@ $(document).ready(function() {
                     coord[2] / video.videoWidth * canvas.clientWidth,
                     coord[3] / video.videoHeight * canvas.clientHeight);
                 context.stroke();
+                context.clearRect (0 , 0 , canvas.width, canvas.height );
             } else fist_pos_old = null;
         }
     }
