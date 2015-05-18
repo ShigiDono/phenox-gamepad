@@ -1,9 +1,10 @@
 $(document).ready(function() {
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
     var canvas = document.getElementById("overlay");
+    var context = canvas.getContext('2d');
     var ctracker = new clm.tracker();
     ctracker.init(pModel);
-    ctracker.start(videoInput);
+    ctracker.start(document.getElementById('video'));
     function resizeCanvas() {
             canvas.width = window.innerWidth*devicePixelRatio;
             canvas.height = window.innerHeight*devicePixelRatio;
