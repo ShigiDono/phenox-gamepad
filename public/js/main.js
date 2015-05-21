@@ -1,19 +1,19 @@
 $(document).ready(function() {
 
-        var requestAnimationFrame =
-            window.requestAnimationFrame        || 
-            window.webkitRequestAnimationFrame  || 
-            window.mozRequestAnimationFrame     || 
-            window.oRequestAnimationFrame       ||
-            function(callback, element) {
-                var currTime = new Date().getTime();
-                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-                var id = window.setTimeout(function() {
-                    callback(currTime + timeToCall);
-                }, timeToCall);
-                lastTime = currTime + timeToCall;
-                return id;
-            };
+    var requestAnimationFrame =
+        window.requestAnimationFrame        || 
+        window.webkitRequestAnimationFrame  || 
+        window.mozRequestAnimationFrame     || 
+        window.oRequestAnimationFrame       ||
+        function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+    };
     var detector = 0;
 
     console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
@@ -143,7 +143,7 @@ $(document).ready(function() {
                     dy: joystick_b.deltaY()
                 }
             }));
-            if (joystick_b.deltaY() > 119) {
+            if (joystick_b.deltaY() > 100) {
                 go_up = go_up || setTimeout(function() {
                     ws.send(JSON.stringify({
                         type: "command",
@@ -154,7 +154,7 @@ $(document).ready(function() {
                 clearTimeout(go_up);
                 go_up = null;
             }
-            if (joystick_b.deltaY() < -119) {
+            if (joystick_b.deltaY() < -100) {
                 go_down = go_down || setTimeout(function() {
                     ws.send(JSON.stringify({
                         type: "command",
@@ -182,23 +182,23 @@ $(document).ready(function() {
         check_landscape();
     });
     function toggleFullScreen() {
-  var doc = window.document;
-  var docEl = doc.documentElement;
+        var doc = window.document;
+        var docEl = doc.documentElement;
 
-  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+        var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+        var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 
-  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-    requestFullScreen.call(docEl);
-  }
-  else {
-    //cancelFullScreen.call(doc);
-  }
-}
-document.documentElement.addEventListener("mousedown", function(){
-    toggleFullScreen();
-});
-document.documentElement.addEventListener("touchstart", function(){
-    toggleFullScreen();
-});
+        if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        requestFullScreen.call(docEl);
+        }
+        else {
+        //cancelFullScreen.call(doc);
+        }
+    }
+    document.documentElement.addEventListener("mousedown", function(){
+        toggleFullScreen();
+    });
+    document.documentElement.addEventListener("touchstart", function(){
+        toggleFullScreen();
+    });
 });
