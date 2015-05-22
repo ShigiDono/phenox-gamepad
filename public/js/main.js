@@ -333,6 +333,9 @@ void main(void) {\n\
         var s = new shader();
         initTextureFramebuffer();
         var pixelData = new Uint8Array(64*64*4);
+        var target_x = 0;
+        var target_y = 0;
+        var target_weight = 0;
 
         function draw(time) {
             ti = Date.now()/1000.0;
@@ -345,7 +348,21 @@ void main(void) {\n\
                 //gl.generateMipmap(gl.TEXTURE_2D);
                 //gl.bindTexture(gl.TEXTURE_2D, null);
                 gl.readPixels(0, 0, 64, 64, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
-                console.log(pixelData);
+                target_weight = 0;
+                for (var x = 0; x < 64; x++) {
+                    for (var y = 0; y < 64; y++) {
+                        if (pixelData[(y*64+x)*4] != 0) {
+                            target_weight++;
+                            target_x += x;
+                            target_y += y;
+                        }
+                    }
+                }
+                if (target_weight) {
+                    target_x = target_x / target_weight - 32;
+                    target_y = target_y / target_weight - 32;
+                }
+                console.log(target_x, target_y);
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
                 gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
                 t.draw(s, {texture:rttTexture});
