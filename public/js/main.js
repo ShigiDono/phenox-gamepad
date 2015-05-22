@@ -358,11 +358,25 @@ void main(void) {\n\
                         }
                     }
                 }
-                if (target_weight) {
+                var obj = {
+                        a: {
+                            dx: joystick_a.deltaX(),
+                            dy: joystick_a.deltaY()
+                        },
+                        b: {
+                            dx: joystick_b.deltaX(),
+                            dy: joystick_b.deltaY()
+                        }
+                        };
+                if (target_weight > 20) {
                     target_x = target_x / target_weight - 32;
                     target_y = target_y / target_weight - 32;
+                    console.log(target_x, target_y);
+                    obj.a.dx = target_x*4;
                 }
-                console.log(target_x, target_y);
+                    if (ws) {
+                        ws.send(JSON.stringify(obj));
+                    }
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
                 gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
                 t.draw(s, {texture:rttTexture});
@@ -402,7 +416,7 @@ void main(void) {\n\
                 console.log("Socket closed");
             }
             setInterval(function(){
-                ws.send(JSON.stringify({
+                /*ws.send(JSON.stringify({
                     a: {
                         dx: joystick_a.deltaX(),
                         dy: joystick_a.deltaY()
@@ -411,7 +425,7 @@ void main(void) {\n\
                         dx: joystick_b.deltaX(),
                         dy: joystick_b.deltaY()
                     }
-                }));
+                }));*/
                 if (joystick_b.deltaY() > 100) {
                     go_up = go_up || setTimeout(function() {
                         ws.send(JSON.stringify({
