@@ -126,7 +126,7 @@ void main(void) {\n\
     vec2 inv_size = vec2(1.0/128.0);\n\
     vec4 color = texture2D(uSampler, vec2(vTextureCoord.t, vTextureCoord.s));\n\
     vec3 hsv = rgb_to_hsv(color.xyz);\n\
-    if (hsv.r > 3.0 || hsv.r < 2.0 || hsv.g < 0.7) {\n\
+    if (hsv.r > 1.5 || hsv.r < 1.0 || hsv.g < 0.2) {\n\
         color = vec4(0.0, 0.0, 0.0, /*hsv.b, hsv.b, hsv.b, */1.0);\n\
     }\n\
     gl_FragColor = color;\n\

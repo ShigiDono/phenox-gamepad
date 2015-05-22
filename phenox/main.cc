@@ -32,7 +32,7 @@ int ftstate = 0;
 const int ftmax = 200;
 CvMat *mat;
 
-int param[]={CV_IMWRITE_JPEG_QUALITY,70};
+int param[]={CV_IMWRITE_JPEG_QUALITY,92};
 IplImage *testImage;    
 int  count = 0;
 
