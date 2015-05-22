@@ -334,14 +334,14 @@ void main(void) {\n\
             ti = Date.now()/1000.0;
 
             if (typeof te != "undefined" && typeof te.texture != "undefined") {
-                gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
+                //gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
                 gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
                 t.draw(s, te);
-                gl.bindTexture(gl.TEXTURE_2D, rttTexture);
-                gl.generateMipmap(gl.TEXTURE_2D);
-                gl.bindTexture(gl.TEXTURE_2D, null);
-                gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-                gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+                //gl.bindTexture(gl.TEXTURE_2D, rttTexture);
+                //gl.generateMipmap(gl.TEXTURE_2D);
+                //gl.bindTexture(gl.TEXTURE_2D, null);
+                //gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+                //gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
             }
             requestAnimationFrame(draw);
         }
