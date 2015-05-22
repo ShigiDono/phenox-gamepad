@@ -328,17 +328,17 @@ void main(void) {\n\
 
         var t = new rect_buffer();
         var s = new shader();
-
+        initTextureFramebuffer();
 
         function draw(time) {
             gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
             ti = Date.now()/1000.0;
 
             if (typeof te != "undefined" && typeof te.texture != "undefined") {
-                gl.bindFramebuffer(rttFramebuffer);
+                gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
                 gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
                 t.draw(s, te);
-                gl.bindFramebuffer(null);
+                gl.bindFramebuffer(gl.FRAMEBUFFER, null);
             }
             requestAnimationFrame(draw);
         }
