@@ -222,14 +222,15 @@ void main(void) {\n\
 
         function texture(element) {
             this.my_img = new Image();
-            my_img.width = 128;
-            my_img.height = 128;
-            my_img.src = element;
+            this.my_img.width = 128;
+            this.my_img.height = 128;
+            this.my_img.src = element;
             this.texture = gl.createTexture();
-            my_img.onload = function() {
+            var self = this;
+            this.my_img.onload = function() {
                 gl.bindTexture(gl.TEXTURE_2D, self.texture);
                 //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, my_img);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, self.my_img);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //gl.NEAREST is also allowed, instead of gl.LINEAR, as neither mipmap.
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); //Prevents s-coordinate wrapping (repeating).
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); //Prevents t-coordinate wrapping (repeating).
