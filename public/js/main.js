@@ -221,7 +221,7 @@ void main(void) {\n\
         var te;
 
         function texture(element) {
-            var my_img = new Image();
+            this.my_img = new Image();
             my_img.width = 128;
             my_img.height = 128;
             my_img.src = element;
@@ -326,7 +326,11 @@ void main(void) {\n\
                 if (data[4] == 0) {
                     var src = URL.createObjectURL(new Blob([e.data.slice(5)]));
                     document.getElementById('video').src = src;
-                    te.src = src;
+                    if (!te) {
+                        te = new texture(src);
+                    } else if (te.my_img) {
+                        te.my_img.src = src;
+                    }
                 } else {
 
                 }
