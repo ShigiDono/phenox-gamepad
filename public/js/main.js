@@ -372,7 +372,7 @@ void main(void) {\n\
                     target_x = target_x / target_weight - 32;
                     target_y = target_y / target_weight - 32;
                     console.log(target_x, target_y);
-                    obj.a.dx = target_x*4;
+                    obj.a.dx = target_x*2;
                 }
                     if (ws) {
                         ws.send(JSON.stringify(obj));

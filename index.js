@@ -49,7 +49,8 @@ ws.on('connection', function(ws) {
             }
         } else {
             if (Math.abs(obj.a.dx) > 1 || Math.abs(obj.a.dy) > 1/* || obj.b.dx != 0*/) {
-                phenox.set_angles(-obj.a.dy/15, -obj.a.dx/15/*, obj.b.dx/15*/);//obj.b.dx
+                //phenox.set_angle(-obj.a.dy/15, -obj.a.dx/15/*, obj.b.dx/15*/);//obj.b.dx
+                phenox.set_pos(obj.a.dx, 0/*, obj.b.dx/15*/);//obj.b.dx
             }
             /*if (obj.b.dy < -100) {
                 phenox.go_up();
