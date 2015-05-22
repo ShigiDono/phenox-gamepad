@@ -345,7 +345,7 @@ void main(void) {\n\
                 //gl.bindTexture(gl.TEXTURE_2D, null);
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
                 gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-                t.draw(s, rttTexture);
+                t.draw(s, {texture:rttTexture});
             }
             requestAnimationFrame(draw);
         }
