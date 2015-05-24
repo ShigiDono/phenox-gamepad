@@ -175,10 +175,10 @@ void main(void) {\n\
 
         function rect_buffer() {
             var vertices = [
-                1,  -1, 0, 1, 1,
-                -1, -1, 0, 1, 0,
-                1,  1,  0, 0, 1,
-                -1, 1,  0, 0, 0];
+                1,  -1, 0, 0, 1,
+                -1, -1, 0, 0, 0,
+                1,  1,  0, 1, 1,
+                -1, 1,  0, 1, 0];
             this.vertex_buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.vertex_buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
