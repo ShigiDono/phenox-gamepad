@@ -344,6 +344,7 @@ void main(void) {\n\
         setTimeout(function() {encoder = new Whammy.Video(40); setTimeout(function() {
             var output = encoder.compile();
             console.log((window.webkitURL || window.URL).createObjectURL(output));
+            encoder = null;
         }, 10000);}, 1000);
 
         function draw(time) {
@@ -476,7 +477,7 @@ void main(void) {\n\
                 requestFullScreen.call(docEl);
             }
             else {
-            //cancelFullScreen.call(doc);
+                //cancelFullScreen.call(doc);
             }
         }
         document.documentElement.addEventListener("mousedown", function(){
