@@ -335,7 +335,16 @@ void main(void) {\n\
         var pixelData = new Uint8Array(64*64*4);
         var target_x = 0;
         var target_y = 0;
+        var target_x_final = 0;
+        var target_y_final = 0;
+        var ready_to_send = false;
         var target_weight = 0;
+
+        var encoder;
+        setTimeout(function() {encoder = new Whammy.Video(40); setTimeout(function() {
+            var output = encoder.compile();
+            console.log((window.webkitURL || window.URL).createObjectURL(output));
+        }, 10000);}, 1000);
 
         function draw(time) {
             ti = Date.now()/1000.0;
@@ -344,9 +353,6 @@ void main(void) {\n\
                 gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
                 gl.clear(gl.COLOR_BUFFER_BIT);
                 t.draw(s, te);
-                //gl.bindTexture(gl.TEXTURE_2D, rttTexture);
-                //gl.generateMipmap(gl.TEXTURE_2D);
-                //gl.bindTexture(gl.TEXTURE_2D, null);
                 gl.readPixels(0, 0, 64, 64, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
                 target_weight = 0;
                 for (var x = 0; x < 64; x++) {
@@ -358,28 +364,19 @@ void main(void) {\n\
                         }
                     }
                 }
-                var obj = {
-                        a: {
-                            dx: joystick_a.deltaX(),
-                            dy: joystick_a.deltaY()
-                        },
-                        b: {
-                            dx: joystick_b.deltaX(),
-                            dy: joystick_b.deltaY()
-                        }
-                        };
                 if (target_weight > 20) {
-                    target_x = target_x / target_weight - 32;
-                    target_y = target_y / target_weight - 32;
-                    console.log(target_x, target_y);
-                    obj.a.dx = target_x*2;
+                    target_x_final = Math.max(-64, Math.min(64, target_x / target_weight)) - 32;
+                    target_y_final = Math.max(-64, Math.min(target_y / target_weight)) - 32;
+                    ready_to_send = true;
+                } else {
+                    ready_to_send = false;
                 }
-                    if (ws) {
-                        ws.send(JSON.stringify(obj));
-                    }
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
                 gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
                 t.draw(s, {texture:rttTexture});
+                if (encoder) {
+                    encoder.add(canvas);
+                }
             }
             requestAnimationFrame(draw);
         }
@@ -416,7 +413,7 @@ void main(void) {\n\
                 console.log("Socket closed");
             }
             setInterval(function(){
-                /*ws.send(JSON.stringify({
+                var obj = {
                     a: {
                         dx: joystick_a.deltaX(),
                         dy: joystick_a.deltaY()
@@ -425,7 +422,11 @@ void main(void) {\n\
                         dx: joystick_b.deltaX(),
                         dy: joystick_b.deltaY()
                     }
-                }));*/
+                };
+                if (ready_to_send) {
+                    obj.a.dx = target_x_final*2;
+                }
+                ws.send(JSON.stringify(obj));
                 if (joystick_b.deltaY() > 100) {
                     go_up = go_up || setTimeout(function() {
                         ws.send(JSON.stringify({
@@ -472,7 +473,7 @@ void main(void) {\n\
             var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 
             if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-            //requestFullScreen.call(docEl);
+                requestFullScreen.call(docEl);
             }
             else {
             //cancelFullScreen.call(doc);
